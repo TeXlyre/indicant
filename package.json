@@ -1,0 +1,62 @@
+{
+  "name": "indicant",
+  "version": "0.1.0",
+  "description": "Keyed approximate room discovery for signaling servers",
+  "author": "Fares Abawi <fares@abawi.me> (https://abawi.me)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/texlyre/indicant.git"
+  },
+  "homepage": "https://texlyre.github.io/indicant/",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./client": {
+      "types": "./dist/client.d.ts",
+      "import": "./dist/client.js"
+    },
+    "./http": {
+      "types": "./dist/http/index.d.ts",
+      "import": "./dist/http/index.js"
+    },
+    "./filters": {
+      "types": "./dist/filters/index.d.ts",
+      "import": "./dist/filters/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "examples",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check": "tsc -p tsconfig.json --noEmit",
+    "build:pages-example": "npm run build && cd example/github-pages-example && npm install && npm run build",
+    "pages-example": "cd example/github-pages-example && npm start"
+  },
+  "keywords": [
+    "yjs",
+    "y-webrtc",
+    "signaling",
+    "presence",
+    "cuckoo-filter",
+    "bloom-filter",
+    "approximate-membership"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.22.4",
+    "typescript": "^5.5.0"
+  }
+}
