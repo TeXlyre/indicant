@@ -1,0 +1,14 @@
+{
+  "name": "indicant-dashboard-example",
+  "version": "0.1.0",
+  "description": "Indicant distribution dashboard: worker-thread servers federated over HTTP",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "start": "node dist/server.js"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0"
+  }
+}

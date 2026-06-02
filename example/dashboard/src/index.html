@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Indicant Distribution Demo</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+    <header>
+        <h1>Indicant Distribution Demo</h1>
+        <div class="links">
+            <a href="https://github.com/TeXlyre/indicant" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a href="https://www.npmjs.com/package/indicant" target="_blank" rel="noopener noreferrer">npm</a>
+        </div>
+    </header>
+
+    <main>
+        <p>Each embedded server runs in its own worker thread with a real HTTP listener. Distributors federate by
+            polling every server's <code>GET /filter</code> over HTTP and answering <code>locate</code> from the
+            snapshots they have pulled. Distributors do not have rooms themselves, so every
+            hit is a remote snapshot match from a double-hashed key it cannot reverse.</p>
+
+        <section>
+            <h2>Cluster configuration</h2>
+            <p>Choose the membership filter, the number of providers (distributors), and the number of servers each
+                provider owns, then rebuild. Rebuilding terminates and respawns the server workers.</p>
+            <label>Filter
+                <select id="filterType">
+                    <option value="cuckoo">cuckoo</option>
+                    <option value="bloom">bloom</option>
+                    <option value="counting-bloom">counting-bloom</option>
+                    <option value="exact-set">exact-set</option>
+                </select>
+            </label>
+            <label>Providers <input id="providers" type="number" min="1" max="6" value="2" size="3"></label>
+            <label>Servers / provider <input id="serversPerProvider" type="number" min="1" max="6" value="2"
+                    size="3"></label>
+            <button onclick="rebuild()">Rebuild cluster</button>
+            <span class="muted" id="rebuildNote"></span>
+            <p class="muted" id="pollNote"></p>
+        </section>
+
+        <section>
+            <h2>Create a room</h2>
+            <p>The chosen distributor asks one of its own server workers to register a room through the signaling
+                lifecycle hook (<code>indicant.enter</code>), in process. The raw UUID stays on the server; only the
+                double-hashed key enters the filter.</p>
+            <label>Distributor <select id="createDist"></select></label>
+            <button onclick="createRoom()">Create random room</button>
+        </section>
+
+        <section>
+            <h2>Look up a room</h2>
+            <p>A distributor answers from the snapshots it has pulled. A room created on another provider's server
+                appears only after the next poll, so a fresh lookup can return no hits for up to one poll interval.</p>
+            <label>Distributor <select id="lookupDist"></select></label>
+            <label>Room UUID <input id="uuid" placeholder="paste a UUID from the table" size="38"></label>
+            <button onclick="lookup()">Ask distributor</button>
+            <pre id="out">Ready.</pre>
+            <p class="links" id="apiLinks"></p>
+        </section>
+
+        <section>
+            <h2>Live routing accuracy</h2>
+            <p>The control plane locates every created room plus 200 never-created keys against a distributor's pulled
+                snapshots. These filters never miss an inserted key, so <code>missed known rooms</code> should stay 0.
+            </p>
+            <p>false-positives and phantom hits may rarely occur but that is expected given the probabilistic
+                nature of the filters</p>
+            <button onclick="simulate()">Run simulation</button>
+            <div id="sim"></div>
+            <p class="links"><a href="/api/simulate?probes=200">GET /api/simulate</a></p>
+        </section>
+
+        <section>
+            <h2>Cluster</h2>
+            <div id="cluster" class="grid"></div>
+            <h3>Servers <span class="muted">each a worker thread on its own port</span></h3>
+            <div id="servers"></div>
+            <h3>Rooms <span class="muted">demo-only; distributors never receive raw UUIDs</span></h3>
+            <div id="rooms"></div>
+            <p class="links"><a href="/api/state">GET /api/state</a></p>
+        </section>
+    </main>
+
+    <footer>
+        <p>MIT License &copy; <span id="year"></span> <a href="https://abawi.me">Fares Abawi</a></p>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+
+    <script src="/app.js"></script>
+</body>
+
+</html>
