@@ -139,7 +139,7 @@ The signaling server only reports `enter`, `leave`, and `close`. It does not nee
 Runnable servers are in [`example/`](example):
 
 ```bash
-npx tsx example/simple-indicant-server.ts    # one embedded server
+npx tsx example/simple-indicant-server.ts    # one embedded server (CLI)
 npx tsx example/dashboard/server.ts          # distributor demo with double-hashed keys
 ```
 
